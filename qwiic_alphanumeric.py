@@ -316,3 +316,211 @@ class QwiicAlphanumeric(object):
             time.sleep(0.01)
         return False
 
+    # ---------------------------------------------------------------------------------
+    # initialize()
+    #
+    # Run through initialization sequence for each display connected on the I2C bus
+    def initialize(self):
+        """
+            Run through initialization sequence for each display connected on the I2C bus
+            Enable clocks, set brightness default to full brightness, turn off blinking, and
+            turn all displays on
+
+            :return: True if all function calls passed, False if there's a failure somewhere
+            :rtype: bool
+        """
+        # Turn on system clock of all displays
+        if self.enable_system_clock() == False:
+            return False
+        
+        # Set brightness of all displays to full brightness
+        if self.set_brightness(16) == False:
+            return False
+
+        # Turn blinking off for all displays
+        if self.set_blink_rate(self.ALPHA_BLINK_RATE_NOBLINK) == False:
+            return False
+        
+        # Turn on all displays
+        if self.display_on() == False:
+            return False
+        
+        return True
+    
+    # ---------------------------------------------------------------------------------
+    # enable_system_clock()
+    #
+    # Turn on the system oscillator for all displays on the I2C bus
+    def enable_system_clock(self):
+        """
+            Turn on the system oscillator for all displays on the I2C bus
+
+            :return: True if all clocks successfully enabled, false otherwise.
+            :rtype: bool
+        """
+        status = True
+        
+        for i in range(0, self.number_of_displays):
+            if self.enable_system_clock_single(i) == False:
+                status = False
+        
+        return status
+
+    # ---------------------------------------------------------------------------------
+    # disable_system_clock()
+    #
+    # Turn off the system oscillator for all displays on the bus
+    def disable_system_clock(self):
+        """
+            Turn off the system oscillator for all displays on the bus
+
+            :return: True if all clocks successfully disabled, false otherwise.
+            :rtype: bool
+        """
+        status = True
+
+        for i in range(0, self.number_of_displays):
+            if self.disable_system_clock_single(i) == False:
+                status = False
+        
+        return status
+    
+    # ---------------------------------------------------------------------------------
+    # enable_system_clock_single(display_number)
+    #
+    # Turn on the system oscillator for normal operation mode
+    def enable_system_clock_single(self, display_number):
+        """
+            Turn on the system oscillator for normal operation mode
+
+            :param display_number: number of display on I2C bus to enable the system clock
+                for.
+            :return: True if setting updated successfully, false otherwise.
+            :rtype: bool
+        """
+        data_to_write = self.ALPHA_CMD_SYSTEM_SETUP | 1 # Enable system clock  bit
+
+        status = self.write_RAM(self.look_up_display_address(display_number), data_to_write)
+        time.sleep(0.001)   # Allow display to start
+
+        return status
+
+    # ---------------------------------------------------------------------------------
+    # disable_system_clock_single(display_number)
+    #
+    # Turn off the system oscillator for standby mode
+    def disable_system_clock_single(self, display_number):
+        """
+            Turn off the system oscillator for standby mode
+
+            :param display_number: number of display on I2C bus to disable the system
+                clock for.
+            :return: True if setting updated successfully, false otherwise.
+            :rtype: bool
+        """
+        data_to_write = self.ALPHA_CMD_SYSTEM_SETUP | 0 # Standby mode
+
+        return self.write_RAM(self.look_up_display_address(display_number), data_to_write)
+
+    # ---------------------------------------------------------------------------------
+    # look_up_display_address(display_number)
+    #
+    # This function connects the display number to its coressponding address
+    def look_up_display_address(self, display_number):
+        """
+            This function connects the display number to its coressponding address
+
+            :param display_number: number of display on I2C bus. The left-most display is zero
+                and display number increments by 1 with each additional display on bus.
+            :return: The I2C address of given display. 0 if display_number is not valid
+            :rtype: int
+        """
+        if display_number == 0:
+            return self._device_address_left
+        elif display_number == 1:
+            return self._device_address_left_center
+        elif display_number == 2:
+            return self._device_address_right_center
+        elif display_number == 3:
+            return self._device_address_right
+        
+        return 0    # We shouldn't get here
+
+    # ---------------------------------------------------------------------------------
+    # clear()
+    #
+    # Turn off all segments of all displays connected to bus
+    def clear(self):
+        """
+            Turn off all segments of all displays connected to bus
+
+            :return: True if display was updated correctly, false otherwise
+            :rtype: bool
+        """
+        # Clear the display_RAM array
+        for i in range(0, 16 * self.number_of_displays):
+            self.display_RAM[i] = 0
+        
+        # Reset digit position
+        self.digit_position = 0
+
+        return self.update_display()
+
+    # ---------------------------------------------------------------------------------
+    # set_brightness(duty)
+    # 
+    # This function sets the brightness of all displays on the bus
+    def set_brightness(self, duty):
+        """
+            This function sets the brightness of all displays on the bus.
+            Duty cycle over 16.
+
+            :param duty: Valid between 0 (display off) and 15 (full brightness)
+            :return: True if brightness is successfully updated, false otherwise.
+            :rtype: bool
+        """
+        status = True
+
+        for i in range(0, self.number_of_displays):
+            if self.set_brightness_single(i, duty) == False:
+                status = False
+        
+        return status
+
+    # ---------------------------------------------------------------------------------
+    # set_brightness_single(display_number, duty)
+    #
+    # Set the brightness of a single display
+    def set_brightness_single(self, display_number, duty):
+        """
+            Set the brightness of a single display
+
+            :param display_number: The number of display on the I2C bus.
+            :param duty: Over 16. Valid between 0 (display off) and 15 (full brightness)
+            :return: True if brightness is successfully updated, false otherwise.
+            :rtype: bool
+        """
+        # Error check
+        if duty > 15:
+            duty = 15
+        elif duty < 0:
+            duty = 0
+        
+        data_to_write = self.ALPHA_CMD_DIMMING_SETUP | duty
+        return self.write_RAM(self.look_up_display_address(display_number), data_to_write)
+
+    # ---------------------------------------------------------------------------------
+    # set_blink_rate(rate)
+    #
+    # Set the blink rate of all displays on the bus
+    def set_blink_rate(self, rate):
+        """
+            Set the blink rate of all displays on the bus as defined by the datasheet.
+
+            :param rate: Blink frequency in Hz. Valid options are defined by datasheet:
+                2, 1, or 0.5 Hz. Any other input to this function will result in steady
+                alphanumeric display (no blink).
+            :return: True if blink setting is successfully updated, false otherwise.
+            :rtype: bool
+        """
+        
