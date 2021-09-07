@@ -124,107 +124,107 @@ class QwiicAlphanumeric(object):
     alphanumeric_segs.append(0b00000000000000)  # ' ' (space)
     alphanumeric_segs.append(0b00001000001000)  # '!'
     alphanumeric_segs.append(0b00001000000010)  # '"'
-    alphanumeric_segs.append(0b1001101001110)   # '#'
-    alphanumeric_segs.append(0b1001101101101)   # '$'
+    alphanumeric_segs.append(0b01001101001110)  # '#'
+    alphanumeric_segs.append(0b01001101101101)  # '$'
     alphanumeric_segs.append(0b10010000100100)  # '%'
-    alphanumeric_segs.append(0b110011011001)    # '&'
-    alphanumeric_segs.append(0b1000000000)      # '''
-    alphanumeric_segs.append(0b111001)          # '('
-    alphanumeric_segs.append(0b1111)            # ')'
+    alphanumeric_segs.append(0b00110011011001)  # '&'
+    alphanumeric_segs.append(0b00001000000000)  # '''
+    alphanumeric_segs.append(0b00000000111001)  # '('
+    alphanumeric_segs.append(0b00000000001111)  # ')'
     alphanumeric_segs.append(0b11111010000000)  # '*'
-    alphanumeric_segs.append(0b1001101000000)   # '+'
+    alphanumeric_segs.append(0b01001101000000)  # '+'
     alphanumeric_segs.append(0b10000000000000)  # ','
-    alphanumeric_segs.append(0b101000000)       # '-'
+    alphanumeric_segs.append(0b00000101000000)  # '-'
     alphanumeric_segs.append(0b00000000000000)  # '.'
     alphanumeric_segs.append(0b10010000000000)  # '/'
-    alphanumeric_segs.append(0b111111)          # '0'
-    alphanumeric_segs.append(0b10000000110)     # '1'
-    alphanumeric_segs.append(0b101011011)       # '2'
-    alphanumeric_segs.append(0b101001111)       # '3'
-    alphanumeric_segs.append(0b101100110)       # '4'
-    alphanumeric_segs.append(0b101101101)       # '5'
-    alphanumeric_segs.append(0b101111101)       # '6'
-    alphanumeric_segs.append(0b1010000000001)   # '7'
-    alphanumeric_segs.append(0b101111111)       # '8'
-    alphanumeric_segs.append(0b101100111)       # '9'
+    alphanumeric_segs.append(0b00000000111111)  # '0'
+    alphanumeric_segs.append(0b00010000000110)  # '1'
+    alphanumeric_segs.append(0b00000101011011)  # '2'
+    alphanumeric_segs.append(0b00000101001111)  # '3'
+    alphanumeric_segs.append(0b00000101100110)  # '4'
+    alphanumeric_segs.append(0b00000101101101)  # '5'
+    alphanumeric_segs.append(0b00000101111101)  # '6'
+    alphanumeric_segs.append(0b01010000000001)  # '7'
+    alphanumeric_segs.append(0b00000101111111)  # '8'
+    alphanumeric_segs.append(0b00000101100111)  # '9'
     alphanumeric_segs.append(0b00000000000000)  # ':'
     alphanumeric_segs.append(0b10001000000000)  # ';'
-    alphanumeric_segs.append(0b110000000000)    # '<'
-    alphanumeric_segs.append(0b101001000)       # '='
+    alphanumeric_segs.append(0b00110000000000)  # '<'
+    alphanumeric_segs.append(0b00000101001000)  # '='
     alphanumeric_segs.append(0b01000010000000)  # '>'
     alphanumeric_segs.append(0b01000100000011)  # '?'
     alphanumeric_segs.append(0b00001100111011)  # '@'
-    alphanumeric_segs.append(0b101110111)       # 'A'
-    alphanumeric_segs.append(0b1001100001111)   # 'B'
-    alphanumeric_segs.append(0b111001)          # 'C'
-    alphanumeric_segs.append(0b1001000001111)   # 'D'
-    alphanumeric_segs.append(0b101111001)       # 'E'
-    alphanumeric_segs.append(0b101110001)       # 'F'
-    alphanumeric_segs.append(0b100111101)       # 'G'
-    alphanumeric_segs.append(0b101110110)       # 'H'
-    alphanumeric_segs.append(0b1001000001001)   # 'I'
-    alphanumeric_segs.append(0b11110)           # 'J'
-    alphanumeric_segs.append(0b110001110000)    # 'K'
-    alphanumeric_segs.append(0b111000)          # 'L'
-    alphanumeric_segs.append(0b10010110110)     # 'M'
-    alphanumeric_segs.append(0b100010110110)    # 'N'
-    alphanumeric_segs.append(0b111111)          # 'O'
-    alphanumeric_segs.append(0b101110011)       # 'P'
-    alphanumeric_segs.append(0b100000111111)    # 'Q'
-    alphanumeric_segs.append(0b100101110011)    # 'R'
-    alphanumeric_segs.append(0b110001101)       # 'S'
-    alphanumeric_segs.append(0b1001000000001)   # 'T'
-    alphanumeric_segs.append(0b111110)          # 'U'
+    alphanumeric_segs.append(0b00000101110111)  # 'A'
+    alphanumeric_segs.append(0b01001100001111)  # 'B'
+    alphanumeric_segs.append(0b00000000111001)  # 'C'
+    alphanumeric_segs.append(0b01001000001111)  # 'D'
+    alphanumeric_segs.append(0b00000101111001)  # 'E'
+    alphanumeric_segs.append(0b00000101110001)  # 'F'
+    alphanumeric_segs.append(0b00000100111101)  # 'G'
+    alphanumeric_segs.append(0b00000101110110)  # 'H'
+    alphanumeric_segs.append(0b01001000001001)  # 'I'
+    alphanumeric_segs.append(0b00000000011110)  # 'J'
+    alphanumeric_segs.append(0b00110001110000)  # 'K'
+    alphanumeric_segs.append(0b00000000111000)  # 'L'
+    alphanumeric_segs.append(0b00010010110110)  # 'M'
+    alphanumeric_segs.append(0b00100010110110)  # 'N'
+    alphanumeric_segs.append(0b00000000111111)  # 'O'
+    alphanumeric_segs.append(0b00000101110011)  # 'P'
+    alphanumeric_segs.append(0b00100000111111)  # 'Q'
+    alphanumeric_segs.append(0b00100101110011)  # 'R'
+    alphanumeric_segs.append(0b00000110001101)  # 'S'
+    alphanumeric_segs.append(0b01001000000001)  # 'T'
+    alphanumeric_segs.append(0b00000000111110)  # 'U'
     alphanumeric_segs.append(0b10010000110000)  # 'V'
     alphanumeric_segs.append(0b10100000110110)  # 'W'
     alphanumeric_segs.append(0b10110010000000)  # 'X'
-    alphanumeric_segs.append(0b1010010000000)   # 'Y'
+    alphanumeric_segs.append(0b01010010000000)  # 'Y'
     alphanumeric_segs.append(0b10010000001001)  # 'Z'
-    alphanumeric_segs.append(0b111001)          # '['
-    alphanumeric_segs.append(0b100010000000)    # '\'
-    alphanumeric_segs.append(0b1111)            # ']'
+    alphanumeric_segs.append(0b00000000111001)  # '['
+    alphanumeric_segs.append(0b00100010000000)  # '\'
+    alphanumeric_segs.append(0b00000000001111)  # ']'
     alphanumeric_segs.append(0b10100000000000)  # '^'
-    alphanumeric_segs.append(0b1000)            # '_'
-    alphanumeric_segs.append(0b10000000)        # '`'
-    alphanumeric_segs.append(0b101011111)       # 'a'
-    alphanumeric_segs.append(0b100001111000)    # 'b'
-    alphanumeric_segs.append(0b101011000)       # 'c'
+    alphanumeric_segs.append(0b00000000001000)  # '_'
+    alphanumeric_segs.append(0b00000010000000)  # '`'
+    alphanumeric_segs.append(0b00000101011111)  # 'a'
+    alphanumeric_segs.append(0b00100001111000)  # 'b'
+    alphanumeric_segs.append(0b00000101011000)  # 'c'
     alphanumeric_segs.append(0b10000100001110)  # 'd'
-    alphanumeric_segs.append(0b1111001)         # 'e'
-    alphanumeric_segs.append(0b1110001)         # 'f'
-    alphanumeric_segs.append(0b110001111)       # 'g'
-    alphanumeric_segs.append(0b101110100)       # 'h'
-    alphanumeric_segs.append(0b1000000000000)   # 'i'
-    alphanumeric_segs.append(0b1110)            # 'j'
-    alphanumeric_segs.append(0b1111000000000)   # 'k'
-    alphanumeric_segs.append(0b1001000000000)   # 'l'
-    alphanumeric_segs.append(0b1000101010100)   # 'm'
-    alphanumeric_segs.append(0b100001010000)    # 'n'
-    alphanumeric_segs.append(0b101011100)       # 'o'
-    alphanumeric_segs.append(0b10001110001)     # 'p'
-    alphanumeric_segs.append(0b100101100011)    # 'q'
-    alphanumeric_segs.append(0b1010000)         # 'r'
-    alphanumeric_segs.append(0b110001101)       # 's'
-    alphanumeric_segs.append(0b1111000)         # 't'
-    alphanumeric_segs.append(0b11100)           # 'u'
+    alphanumeric_segs.append(0b00000001111001)  # 'e'
+    alphanumeric_segs.append(0b00000001110001)  # 'f'
+    alphanumeric_segs.append(0b00000110001111)  # 'g'
+    alphanumeric_segs.append(0b00000101110100)  # 'h'
+    alphanumeric_segs.append(0b01000000000000)  # 'i'
+    alphanumeric_segs.append(0b00000000001110)  # 'j'
+    alphanumeric_segs.append(0b01111000000000)  # 'k'
+    alphanumeric_segs.append(0b01001000000000)  # 'l'
+    alphanumeric_segs.append(0b01000101010100)  # 'm'
+    alphanumeric_segs.append(0b00100001010000)  # 'n'
+    alphanumeric_segs.append(0b00000101011100)  # 'o'
+    alphanumeric_segs.append(0b00010001110001)  # 'p'
+    alphanumeric_segs.append(0b00100101100011)  # 'q'
+    alphanumeric_segs.append(0b00000001010000)  # 'r'
+    alphanumeric_segs.append(0b00000110001101)  # 's'
+    alphanumeric_segs.append(0b00000001111000)  # 't'
+    alphanumeric_segs.append(0b00000000011100)  # 'u'
     alphanumeric_segs.append(0b10000000010000)  # 'v'
     alphanumeric_segs.append(0b10100000010100)  # 'w'
     alphanumeric_segs.append(0b10110010000000)  # 'x'
-    alphanumeric_segs.append(0b1100001110)      # 'y'
+    alphanumeric_segs.append(0b00001100001110)  # 'y'
     alphanumeric_segs.append(0b10010000001001)  # 'z'
     alphanumeric_segs.append(0b10000011001001)  # '{'
-    alphanumeric_segs.append(0b1001000000000)   # '|'
-    alphanumeric_segs.append(0b110100001001)    # '}'
+    alphanumeric_segs.append(0b01001000000000)  # '|'
+    alphanumeric_segs.append(0b00110100001001)  # '}'
     alphanumeric_segs.append(0b00000101010010)  # '~'
     alphanumeric_segs.append(0b11111111111111)  # Unknown character (DEL or RUBOUT)
 
     # Globals
-    _device_address_left = 0    # Address of primary alphanumeric display
-    _device_address_left_center = 0
-    _device_address_right_center = 0
-    _device_address_right = 0
+    _device_address_display_one = 0    # Address of primary alphanumeric display
+    _device_address_display_two = 0
+    _device_address_display_three = 0
+    _device_address_display_four = 0
     digit_position = 0  # Tracks the position of the current digit
-    number_of_displays = 1 # Tracks the number of displays connected to the I2C bus
+    number_of_displays = 1 # Tracks the number of displays connected to the I2C bus, default is one display
     display_on_off = 0  # Tracks the on/off state of the display
     decimal_on_off = 0  # Tracks the on/off state of the decimal segment
     colon_on_off = 0    # Tracks the on/off state of the colon segment
@@ -252,37 +252,37 @@ class QwiicAlphanumeric(object):
     # begin(address_left, address_left_center, address_right_center, address_right)
     #
     # Initialize the system and validate the baord.
-    def begin(self, address_left = _QWIIC_ALPHANUMERIC_DEFAULT_ADDRESS, address_left_center = DEFAULT_NOTHING_ATTACHED, address_right_center = DEFAULT_NOTHING_ATTACHED, address_right = DEFAULT_NOTHING_ATTACHED):
+    def begin(self, address_display_one = _QWIIC_ALPHANUMERIC_DEFAULT_ADDRESS, address_display_two = DEFAULT_NOTHING_ATTACHED, address_display_three = DEFAULT_NOTHING_ATTACHED, address_display_four = DEFAULT_NOTHING_ATTACHED):
         """
             Initialize the operation of the Qwiic Alphanumeric.
             Assign addresses to displays and determine the number of displays connected to the bus.
             Run is_connected().
             Initialize and clear displays.
             
-            :param address_left: I2C address of left-most display
-            :param address_left_center: I2C address of the left-center display
-            :param address_right_center: I2C address of the right-center display
-            :param address_right: I2C address of the right-most display
+            :param address_display_one: I2C address of left-most display
+            :param address_display_two: I2C address of the left-center display
+            :param address_dispplay_three: I2C address of the right-center display
+            :param address_display_four: I2C address of the right-most display
             :return: Returns true if a Qwiic Alphanumeric is connected to the system.
                     False otherwise.
             :rtype: bool
         """
-        _device_address_left = address_left # Grab the address(es) of the alphanumeric(s)
-        _device_address_left_center = address_left_center
-        _device_address_right_center = address_right_center
-        _device_address_right = address_right
+        self._device_address_display_one = address_display_one # Grab the address(es) of the alphanumeric(s)
+        self._device_address_display_two = address_display_two
+        self._device_address_display_three = address_display_three
+        self._device_address_display_four = address_display_four
 
         # Figure out how many displays are attached by the number of addresses the user specified
-        if _device_address_right != DEFAULT_NOTHING_ATTACHED:
-            number_of_displays = 4
-        elif _device_address_right_center != DEFAULT_NOTHING_ATTACHED:
-            number_of_displays = 3
-        elif _device_address_left_center != DEFAULT_NOTHING_ATTACHED:
-            number_of_displays = 2
+        if self._device_address_display_four != DEFAULT_NOTHING_ATTACHED:
+            self.number_of_displays = 4
+        elif self._device_address_display_three != DEFAULT_NOTHING_ATTACHED:
+            self.number_of_displays = 3
+        elif self._device_address_display_two != DEFAULT_NOTHING_ATTACHED:
+            self.number_of_displays = 2
         else:
-            number_of_displays = 1
+            self.number_of_displays = 1
 
-        for i in range(0, number_of_displays):
+        for i in range(1, self.number_of_displays + 1):
             if self.is_connected(i) == False:
                 return False
             time.sleep(0.01)
@@ -293,7 +293,7 @@ class QwiicAlphanumeric(object):
         if self.clear() == False:
             return False
         
-        display_content[4 * 4] = '\0'  # Terminate the array because we are doing direct prints
+        self.display_content[4 * 4] = '\0'  # Terminate the array because we are doing direct prints
     
     # ---------------------------------------------------------------------------------
     # is_connected(display_number)
@@ -307,7 +307,7 @@ class QwiicAlphanumeric(object):
             :return: True if the device is connected, false otherwise.
             :rtype: bool
         """
-        tries_before_giveup = 20 
+        tries_before_giveup = 5 
         
         # The LED driver IC sometimes fails to respond. This attempts multiple times before giving up.
         for x in range(0, tries_before_giveup):
@@ -334,7 +334,7 @@ class QwiicAlphanumeric(object):
             return False
         
         # Set brightness of all displays to full brightness
-        if self.set_brightness(16) == False:
+        if self.set_brightness(15) == False:
             return False
 
         # Turn blinking off for all displays
@@ -360,7 +360,7 @@ class QwiicAlphanumeric(object):
         """
         status = True
         
-        for i in range(0, self.number_of_displays):
+        for i in range(1, self.number_of_displays + 1):
             if self.enable_system_clock_single(i) == False:
                 status = False
         
@@ -379,7 +379,7 @@ class QwiicAlphanumeric(object):
         """
         status = True
 
-        for i in range(0, self.number_of_displays):
+        for i in range(1, self.number_of_displays + 1):
             if self.disable_system_clock_single(i) == False:
                 status = False
         
@@ -435,14 +435,14 @@ class QwiicAlphanumeric(object):
             :return: The I2C address of given display. 0 if display_number is not valid
             :rtype: int
         """
-        if display_number == 0:
-            return self._device_address_left
-        elif display_number == 1:
-            return self._device_address_left_center
+        if display_number == 1:
+            return self._device_address_display_one
         elif display_number == 2:
-            return self._device_address_right_center
+            return self._device_address_display_two
         elif display_number == 3:
-            return self._device_address_right
+            return self._device_address_display_three
+        elif display_number == 4:
+            return self._device_address_display_four
         
         return 0    # We shouldn't get here
 
@@ -481,7 +481,7 @@ class QwiicAlphanumeric(object):
         """
         status = True
 
-        for i in range(0, self.number_of_displays):
+        for i in range(1, self.number_of_displays + 1):
             if self.set_brightness_single(i, duty) == False:
                 status = False
         
@@ -523,4 +523,13 @@ class QwiicAlphanumeric(object):
             :return: True if blink setting is successfully updated, false otherwise.
             :rtype: bool
         """
+        status = True
+
+        for i in range(1, self.number_of_displays + 1):
+            if self.set_blink_rate_singe(i, rate) == False:
+                status = False
         
+        return status
+    
+    # ---------------------------------------------------------------------------------
+    
