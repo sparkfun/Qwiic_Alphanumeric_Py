@@ -118,6 +118,8 @@ class QwiicAlphanumeric(object):
     ALPHA_CMD_DISPLAY_SETUP = 0b10000000
     ALPHA_CMD_DIMMING_SETUP = 0b11100000
 
+    SFE_ALPHANUM_UNKNOWN_CHAR = 95
+
     # Lookup table of segments for various characters
     alphanumeric_segs = []
     # nmlkjihgfedcba
@@ -518,7 +520,7 @@ class QwiicAlphanumeric(object):
             Set the blink rate of all displays on the bus as defined by the datasheet.
 
             :param rate: Blink frequency in Hz. Valid options are defined by datasheet:
-                2, 1, or 0.5 Hz. Any other input to this function will result in steady
+                2.0, 1.0, or 0.5 Hz. Any other input to this function will result in steady
                 alphanumeric display (no blink).
             :return: True if blink setting is successfully updated, false otherwise.
             :rtype: bool
@@ -532,4 +534,424 @@ class QwiicAlphanumeric(object):
         return status
     
     # ---------------------------------------------------------------------------------
+    # set_blink_rate_single(display_number, rate)
+    #
+    # Set the blink rate of a single display on the bus
+    def set_blink_rate_single(self, display_number, rate):
+        """
+            Set the blink rate of a single display on the bus
+
+            :param display_number: the number of display to be updated
+            :param rate: Blink frequency in Hz. Valid options are defined by datasheet:
+                2.0, 1.0, or 0.5 Hz. Any other input to this function will result in steady
+                alphanumeric display (no blink).
+            :return: True if blink setting is successfully updated, false otherwise.
+            :rtype: bool
+        """
+        if rate == 2.0:
+            blink_rate = self.ALPHA_BLINK_RATE_2HZ
+        elif rate == 1.0:
+            blink_rate = self.ALPHA_BLINK_RATE_1HZ
+        elif rate == 0.5:
+            blink_rate = self.ALPHA_BLINK_RATE_0_5HZ
+        # Default to no blink
+        else:
+            blink_rate = self.ALPHA_BLINK_RATE_NOBLINK
+        
+        data_to_write = self.ALPHA_CMD_DISPLAY_SETUP | (blink_rate << 1) | self.display_on_off
+        return self.write_RAM(self.look_up_display_address(display_number), data_to_write)
     
+    # ---------------------------------------------------------------------------------
+    # display_on_single(display_number)
+    #
+    # Turn a single alphanumeric display on
+    def display_on_single(self, display_number):
+        """
+            Turn a single alphanumeric display on
+
+            :param display_number: the number of display to be updated
+            :return: True if display is successfully turned on, false otherwise
+            :rtype: bool
+        """
+        return self.set_display_on_off(display_number, True)
+    
+    # ---------------------------------------------------------------------------------
+    # display_off_single(display_number)
+    #
+    # Turn a single alphanumeric display off
+    def display_off_single(self, display_number):  
+        """
+            Turn a single alphanumeric display off
+
+            :param display_number: the number of display to be updated 
+            :return: True if display is successfully turned off, false otherwise
+            :rtype: bool
+        """
+        return self.set_displa_on_off(display_number, False)
+    
+    # ---------------------------------------------------------------------------------
+    # set_display_on_off(display_number, turn_on_display)
+    #
+    # Set or clear the display on/off bit of a given display number
+    def set_display_on_off(self, display_number, turn_on_display):
+        """
+            Set or clear the display on/off bit of a given display number
+
+            :param display_number: the number of display to be updated
+            :param turn_on_display: boolean variable. If true, will turn display on.
+                If false, will turn display off
+            :return: True if display is successfully updated, false otherwise.
+            :rtype: bool
+        """
+        if turn_on_display:
+            self.display_on_off = self.ALPHA_DISPLAY_ON
+        else:
+            self.display_on_off = self.ALPHA_DISPLAY_OFF
+        
+        data_to_write = self.ALPHA_CMD_DISPLAY_SETUP | (self.blink_rate << 1) | self.display_on_off
+        return self.write_RAM(self.look_up_display_address(display_number), data_to_write)
+    
+    # ---------------------------------------------------------------------------------
+    # display_on()
+    #
+    # Turn on all displays on the I2C bus
+    def display_on(self):
+        """
+            Turn on all displays on the I2C bus
+
+            :return: True if displays are successfully turned on, false otherwise.
+            :rtype: bool
+        """
+        status = True
+
+        self.display_on_off = self.ALPHA_DISPLAY_ON
+
+        for i in range(1, self.number_of_displays + 1):
+            if self.display_on_single(i) == False:
+                status = false
+        
+        return status
+    
+    # ---------------------------------------------------------------------------------
+    # display_off()
+    #
+    # Turn off all displays on the I2C bus
+    def display_off(self):
+        """
+            Turn off all displays on the I2C bus
+
+            :return: True if all displays are successfully turned off, false otherwise.
+            :rtype: bool
+        """
+        status = True
+
+        self.display_on_off = self.ALPHA_DISPLAY_OFF
+
+        for i in range(1, self.number_of_displays + 1):
+            if self.display_off_single(i) == False:
+                status = False
+        
+        return status
+    
+    # ---------------------------------------------------------------------------------
+    # decimal_on_single(display_number)
+    #
+    # Turn the decimal point on for a single display
+    def decimal_on_single(self, display_number):
+        """
+            Turn the decimal point on for a single display
+
+            :param display_number: the number of display to turn the decimal on for.
+            :return: true if decimal is successfully turned on, false otherwise.
+            :rtype: bool
+        """
+        return self.set_decimal_on_off(display_number, True)
+
+    # ---------------------------------------------------------------------------------
+    # decimal_off_single(display_number)
+    #
+    # Turn the decimal point off for a single display
+    def decimal_off_single(self, display_number):
+        """
+            Turn the decimal point off for a single display
+
+            :param display_number: the number of display to turn the decimal point off for.
+            :return: true if decimal is successfully turned off, false otherwise.
+            :rtype: bool
+        """
+        return self.set_decimal_on_off(display_number, False)
+    
+    # ---------------------------------------------------------------------------------
+    # set_decimal_on_off(display_number, turn_on_decimal)
+    #
+    # Set or clear the decimal on/off bit
+    def set_decimal_on_off(self, display_number, turn_on_decimal):
+        """
+            Set or clear the decimal on/off bit
+
+            :param display_number: the number of display to update.
+            :param turn_on_decimal: boolean variable. If true, will turn decimal on.
+                If false, will turn decimal off.
+            :return: true if the display is updated successfully, false otherwise.
+            :rtype: bool
+        """
+        adr = 0x03
+        dat = 0
+
+        if turn_on_decimal == False:
+            self.decimal_on_off = self.ALPHA_DECIMAL_ON
+            dat = 0x01
+        else:
+            self.decimal_on_off = self.ALPHA_DECIMAL_OFF
+            dat = 0x00
+        
+        self.display_RAM[adr + (display_number - 1) * 16] = self.display_RAM[adr + display_number * 16] | dat
+        return self.update_display()
+    
+    # ---------------------------------------------------------------------------------
+    # decimal_on()
+    #
+    # Turn the decimal on for all displays on bus
+    def decimal_on(self):
+        """
+            Turn the decimal on for all displays on the bus
+
+            :return: true if displays are updated successfully, false otherwise.
+            :rtype: bool
+        """
+        status = True
+
+        self.decimal_on_off = self.ALPHA_DECIMAL_ON
+
+        for i in range(1, self.number_of_displays + 1):
+            if self.decimal_on_single(i) == False:
+                status = False
+            
+        return status
+    
+    # ---------------------------------------------------------------------------------
+    # decimal_off()
+    #
+    # Turn the decimal point off for all displays on bus
+    def decimal_off(self):
+        """
+            Turn the decimal point off for all displays on the bus
+
+            :return: true if displays are updated successfully, false otherwise.
+            :rtype: bool
+        """
+        status = True
+
+        self.decimal_on_off = self.ALPHA_DECIMAL_OFF
+
+        for i in range(1, self.number_of_displays + 1):
+            if self.decimal_off_single(i) == False:
+                status = False
+        
+        return status
+    
+    # ---------------------------------------------------------------------------------
+    # colon_on_single(display_number)
+    #
+    # Turn the colon on for a single display
+    def colon_on_single(self, display_number):
+        """
+            Turn the colon on for a single display
+
+            :param display_number: number of display to update.
+            :return: true if display updated successfully, false otherwise.
+            :rtype: bool
+        """
+        return self.set_colon_on_off(display_number, True)
+
+    # ---------------------------------------------------------------------------------
+    # colon_off_single(display_number)
+    # 
+    # Turn the colon off for a single display
+    def colon_off_single(self, display_number):
+        """
+            Turn the colon off for a single display
+
+            :param display_number: number of display to update.
+            :return: true if display updated successfully, false otherwise.
+            :rtype: bool
+        """
+        return self.set_colon_on_off(display_number, False)
+    
+    # ---------------------------------------------------------------------------------
+    # set_colon_on_off(display_number, turn_on_colon)
+    #
+    # Set or clear the colon on/off bit
+    def set_colon_on_off(self, display_number, turn_on_colon):
+        """
+            Set or clear the colon on/off bit
+
+            :param display_number: number of display to update.
+            :param turn_on_colon: boolean variable. If true, colon will turn on.
+                If false, colon will turn off.
+            :return true if display updated successfully, false otherwise.
+            :rtype: bool
+        """
+        adr = 0x01
+        dat = 0
+
+        if self.turn_on_colon == True:
+            self.colon_on_off = self.ALPHA_COLON_ON
+            dat = 0x01
+        else:
+            self.colon_on_off = self.ALPHA_COLON_OFF
+            dat = 0x00
+        
+        self.display_RAM[adr + (display_number + 1) * 16] = display_RAM[adr + (display_number + 1) * 16]
+        return update_display()
+
+    # ---------------------------------------------------------------------------------
+    # colon_on()
+    #
+    # Turn the colon on for all displays on the bus
+    def colon_on(self):
+        """
+            Turn the colon on for all displays on the bus
+
+            :return: true if displays successfully updated, false otherwise.
+            :rtype: bool
+        """
+        status = True
+        
+        self.colon_on_off = self.ALPHA_COLON_ON
+        
+        for i in range(1, self.number_of_displays + 1):
+            if self.colon_on_single(i) == False):
+                return False
+        
+        return status
+    
+    # ---------------------------------------------------------------------------------
+    # colon_off()
+    #
+    # Turn the colon off for all displays on the bus
+    def colon_off(self):
+        """
+            Turn the colon off for all displays on the bus
+
+            :return: true if all displays are successfully updated, false otherwise.
+            :rtype: bool
+        """
+        status = True
+
+        self.colon_on_off = self.ALPHA_COLON_OFF
+
+        for i in range(1, self.number_of_displays + 1):
+            if self.colon_off_single(i) == False:
+                status = False
+        
+        return status
+    
+    # ---------------------------------------------------------------------------------
+    # illuminate_segment(segment, digit)
+    # 
+    # Given a segment and a digit, set the matching bit within the RAM of the Holtek RAM set
+    def illuminate_segment(self, segment, digit):
+        """
+            Given a segment and a digit, set the matching bit within the RAM of the Holtek RAM set
+
+            :param segment: the segment to illuminate. There are 14 segments available, so A-N
+            :param digit: the digit on the display to turn the segment on. There are 4 digits 
+                per display
+            :return: nothing
+            :rtype: Void
+        """
+        com = segment - 'A' # Convert the segment letter back to a number
+
+        if com > 6:
+            com -= 7
+        if segment == 'I':
+            com = 0
+        if segment == 'H'
+            com = 1
+        
+        row = digit % 4 # Convert digit (1 to 16) back to a relative position on a given 
+                        # digit on a display
+        if segment > 'G':
+            row += 4
+
+        offset = digit / 4 * 16
+        adr = com * 2 + offset
+
+        # Determine the address
+        if row > 7:
+            adr++
+
+        # Determine the data bit
+        if row > 7:
+            row -= 8
+
+        dat = 1 << row
+
+        self.display_RAM[adr] = self.display_RAM[adr] | dat
+
+    # ---------------------------------------------------------------------------------
+    # illuminate_char(segments_to_turn_on, digit)
+    #
+    # Given a binary set of segments and a digit, store this data into the RAM array
+    def illuminate_char(self, segments_to_turn_on, digit):
+        """
+            Fiven a binary set of segments and a digit, store this data into the RAM array
+
+            :param segments_to_turn_on: list of segments to illuminate which create an 
+                alphanumeric character
+            :param digit: digit on which to illuminate this char (list of segments)
+            :return: nothing
+            :rtype: Void
+        """
+        for i in range(0, 14):
+            if (self.segments_to_turn_on >> i) & 0b1:
+                self.illuminate_segment('A' + i, digit) # Convert the segment number to a letter
+        
+    # ---------------------------------------------------------------------------------
+    # print_char(display_char, digit)
+    #
+    # Print a character, for a given digit, on display
+    def print_char(self, display_char, digit):
+        """
+            Print a character, for a given digit, on display
+
+            :param display_char: the character to be printed to display
+            :param digit: the digit position where character should be printed
+            :return: nothing
+            :rtype: Void
+        """
+        character_position = 65532
+
+        # Space
+        if display_char == ' ':
+            character_position = 0
+        # Printable symbols -- between first character '!' and last character '~'
+        elif display_char >= '!' && display_char <= '~':
+            character_position = display_char - '!' + 1
+
+        disp_num = self.digit_position / 4
+
+        # Take care of special characters by turning correct segment on 
+        if character_position == 14:    # '.'
+            self.decimal_on_single(disp_num)
+        if character_position == 26:    # ':'
+            self.colon_on_single(disp_num)
+        if character_position == 65532: # unknown character
+            character_position = self.SFE_ALPHANUM_UNKNOWN_CHAR
+
+        segments_to_turn_on = self.get_segments_to_turn_on(character_position)
+
+        self.illuminate_char(segments_to_turn_on, digit)
+    
+    # ---------------------------------------------------------------------------------
+    # define_char(display_char, segments_to_turn_on)
+    #
+    # Update the list of characters to define a new segments display for a particular/custom character
+    def define_char(self, display_char, segments_to_turn_on):
+        """
+            Update the list of characters to define a new segments display for a particular/custom character
+
+            :param display_char: the character to update in the list
+            :param segments_to_turn_on: a list of the segments for the custom character
+            :return: true if list is successfully 
