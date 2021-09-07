@@ -62,7 +62,7 @@ def run_example():
         time.sleep(0.03)
         my_display.shift_left()
         # Alternatively - you could also shift the string to the right
-        # my_dispplay.shift_right()
+        # my_display.shift_right()
 
 if __name__ == '__main__':
     try:
