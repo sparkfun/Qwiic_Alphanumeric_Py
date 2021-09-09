@@ -233,7 +233,7 @@ class QwiicAlphanumeric(object):
     blink_rate = ALPHA_BLINK_RATE_NOBLINK   # Tracks the current blinking status
 
     # TODO: Not sure this will work
-    displayRAM[16 * 4]
+    display_RAM[16 * 4]
     display_content[4 * 4 + 1] = ""
 
     def __init__(self, address=None, i2c_driver=None):
@@ -880,7 +880,7 @@ class QwiicAlphanumeric(object):
 
         # Determine the address
         if row > 7:
-            adr++
+            adr = adr + 1
 
         # Determine the data bit
         if row > 7:
@@ -905,7 +905,7 @@ class QwiicAlphanumeric(object):
             :rtype: Void
         """
         for i in range(0, 14):
-            if (self.segments_to_turn_on >> i) & 0b1:
+            if (segments_to_turn_on >> i) & 0b1:
                 self.illuminate_segment('A' + i, digit) # Convert the segment number to a letter
         
     # ---------------------------------------------------------------------------------
@@ -940,18 +940,134 @@ class QwiicAlphanumeric(object):
         if character_position == 65532: # unknown character
             character_position = self.SFE_ALPHANUM_UNKNOWN_CHAR
 
-        segments_to_turn_on = self.get_segments_to_turn_on(character_position)
-
-        self.illuminate_char(segments_to_turn_on, digit)
+        self.illuminate_char(self.alphanumeric_segs[character_position], digit)
     
     # ---------------------------------------------------------------------------------
-    # define_char(display_char, segments_to_turn_on)
+    # display_print(print_string)
     #
-    # Update the list of characters to define a new segments display for a particular/custom character
-    def define_char(self, display_char, segments_to_turn_on):
+    # Print a whole string to the alphanumeric display(s)
+    def display_print(self, print_string):
         """
-            Update the list of characters to define a new segments display for a particular/custom character
+            Print a whole string to the alphanumeric display(s)
 
-            :param display_char: the character to update in the list
-            :param segments_to_turn_on: a list of the segments for the custom character
-            :return: true if list is successfully 
+            :param print_string: string to be printed
+            :return: true if update_display() is successful, false otherwise
+            :rtype: bool
+        """
+        # Clear the display_RAM array
+        for i in range(0, 16 * self.number_of_displays):
+            self.display_RAM[i] = 0
+        
+        self.digit_position = 0
+
+        for i in range(0, len(print_string)):
+            # For special characters like '.' or ':', do not increment the digit position
+            if print_string[i] == '.':
+                self.print_char('.', 0)
+            elif print_string[i] == ':':
+                self.print_char(':', 0)
+            else:
+                self.print_char(print_string[i], self.digit_position)
+                # Record to internal list
+                self.display_content[self.digit_position] = print_string[i]
+
+                self.digit_position = self.digit_position + 1
+                self.digit_position = self.digit_position % (self.number_of_displays * 4)
+        
+        self.update_display()
+    
+    # ---------------------------------------------------------------------------------
+    # update_display()
+    #
+    # Push the contents of display_RAM out to the various displays in 16 byte chunks
+    def update_display(self):
+        """
+            Push the contents of display_RAM out on to the various displays in 16 byte chunks
+
+            :return: true if displays are updated successfully, false otherwise.
+            :rtype: bool
+        """
+        status = True
+
+        for i in range(1, self.number_of_displays):
+            if self.write_RAM(self.look_up_display_address(i), 0, self.display_RAM) == False:
+                status = False
+        
+        return status
+    
+    # ---------------------------------------------------------------------------------
+    # shift_right(shift_amt)
+    #
+    # Shift the display content to the right a number of digits
+    def shift_right(self, shift_amt = 1):
+        """
+            Shift the display content to the right a number of digits
+            
+            :param shift_amt: the number of digits to shift the string
+            :return: true if display updates successfully, false otherwise.
+            :rtype: bool
+        """
+        for x in range(4 * slef.number_of_displays - shift_amt, shift_amt, -1):
+            self.display_content[x] = self.display_content[x - shift_amt]
+        
+        # Clear the leading characters
+        for x in range(0, shift_amt):
+            if x + shift_amt > (4 * self.number_of_displays):
+                break   # Error check
+
+            self.display_content[0 + x] = ' '       
+
+        return self.display_print(self.display_content)
+
+    # ---------------------------------------------------------------------------------
+    # shift_left(shift_amt)
+    #
+    # Shift the display content to the left a number of digits
+    def shift_left(self, shift_amt = 1):
+        """
+            Shift the display content to the left a number of digits
+
+            :param shift_amt: the number of digits to shift the string
+            :return: true if display updates successfully, false otherwise.
+            :rtype: bool
+        """
+        for x in range(0, 4 * self.number_of_displays):
+            if x + shift_amt > (4 * self.number_of_displays):
+                break   # Error check
+            self.display_content[x] = self.display_content[x + shift_amt]
+        
+        # Clear the trailing characters
+        for x in range(0, shift_amt):
+            if (4 * self.number_of_displays - 1 - x) < 0:
+                break   # Error check
+            
+            self.display_content[4 * self.number_of_displays - 1 - x] = ' ' 
+        
+        return self.display_print(self.display_content)
+
+    # ---------------------------------------------------------------------------------
+    # write_RAM(address, reg, buff)
+    #
+    # write LED updates to the RAM of the LED driver IC
+    def write_RAM(self, address, reg, buff):
+        """
+            Write LED updates to the RAM of the LED driver IC
+
+            :param address: I2C address of the display
+            :param reg: the location in RAM to write to 
+            :param buff: the bytes to be written
+            :return: true if RAM has been written to successfully, false otherwise.
+            :rtype: bool
+        """
+        display_num = 1 
+        if address == self._device_address_display_two:
+            display_num = 2
+        elif address == self._device_address_display_three:
+            display_num = 3
+        elif address == self._device_address_display_four:
+            display_num = 4
+        # TODO: not sure if this needs to be here or any of the lines above...
+        self.is_connected(display_num)
+
+        # TODO: need to convert buff into list of bytes
+        self._i2c.writeBlock(address, reg, buff)
