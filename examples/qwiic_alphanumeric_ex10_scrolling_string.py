@@ -49,38 +49,20 @@ def run_example():
     print("\nSparkFun Qwiic Alphanumeric - Example 10: Scrolling String")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
-    if my_display.begin(0x70, 0x72) == False:
+    if my_display.begin(0x70, 0x71) == False:
         print("\nThe Qwiic Alhanumerics aren't connected to the system. Please check your connection", \
             file=sys.stderr)
         return
 
     print("\nQwiic Alphanumerics passed begin!")
-
-    # my_display.print("GET MILK")
-    # time.sleep(1)
-    # my_display.print("ET MILK ")
-    # time.sleep(1)
-    # my_display.print("T MILK  ")
-    # time.sleep(1)
-    # my_display.print(" MILK   ")
-    # time.sleep(1)
-    # my_display.print("MILK    ")
-    # time.sleep(1)
-    # my_display.print("ILK     ")
-    # time.sleep(1)
-    # my_display.print("LK      ")
-    # time.sleep(1)
-    # my_display.print("K       ")
-    # time.sleep(1)
-    # my_display.print("        ")
     
     my_display.print("GET MILK")
 
     while 1:
         time.sleep(1)
-        #my_display.shift_left()
+        my_display.shift_left()
         # Alternatively - you could also shift the string to the right
-        my_display.shift_right()
+        #my_display.shift_right()
 
 if __name__ == '__main__':
     try:
