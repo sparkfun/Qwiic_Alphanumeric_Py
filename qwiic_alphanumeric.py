@@ -663,10 +663,7 @@ class QwiicAlphanumeric(object):
             :param display_number: the number of display to turn the decimal on for.
             :return: true if decimal is successfully turned on, false otherwise.
             :rtype: bool
-        """
-        # Debug
-        print("\nI'm in decimal_on_single")
-        
+        """        
         return self.set_decimal_on_off(display_number, True)
 
     # ---------------------------------------------------------------------------------
@@ -764,9 +761,6 @@ class QwiicAlphanumeric(object):
             :return: true if display updated successfully, false otherwise.
             :rtype: bool
         """
-        # Debug
-        print("\nI'm in colon_on_single")
-        
         return self.set_colon_on_off(display_number, True)
 
     # ---------------------------------------------------------------------------------
@@ -869,10 +863,6 @@ class QwiicAlphanumeric(object):
         segment = ord(segment)
         com = segment - ord('A') # Convert the segment letter back to a number
         
-        # Debug
-        #print("\nThis is com: ")
-        #print(com)
-        
         if com > 6:
             com = com - 7
         # Special cases in which the segment order is a lil switched.
@@ -881,37 +871,17 @@ class QwiicAlphanumeric(object):
         if segment == ord('H'):
             com = 1
         
-        # Debug
-        #print("\nThis is re-calculated com: ")
-        #print(com)
-        
         row = digit % 4 # Convert digit (1 to 16) back to a relative position on a given 
                         # digit on a display
         if segment > ord('G'):
-            # DEbug
-            #print("\nI'm bigger than seg G!")
             row = row + 4
         
-        # DEBUG
-        #print("\nTHis is row: ")
-        #print(row)
-        
         offset = int(digit / 4) * 16
-        # DEBUG: testing
         adr = com * 2 + offset
-        #adr = com * 2
-        
-        # debug:
-        #print("\nThis is offset: ")
-        #print(offset)
-        #print("\nTHis is adr: ")
-        #print(adr)
 
         # Determine the address
         if row > 7:
             adr = adr + 1
-            # Debug
-            #print("\nROW BIGGER THAN 7!")
 
         # Determine the data bit
         if row > 7:
@@ -989,14 +959,8 @@ class QwiicAlphanumeric(object):
             :return: true if update_display() is successful, false otherwise
             :rtype: bool
         """
-        # Debug
-        print("this is print_string: ")
-        print(print_string)
-        
+        # Clear the display_RAM array
         self.clear()
-        # # Clear the display_RAM array
-        # for i in range(0, 16 * self.number_of_displays):
-            # self.display_RAM[i] = 0
         
         self.digit_position = 0
 
@@ -1027,10 +991,6 @@ class QwiicAlphanumeric(object):
             :return: true if displays are updated successfully, false otherwise.
             :rtype: bool
         """
-        # Debug
-        print("\nThis is display_RAM: ")
-        print(self.display_RAM)
-        
         status = True
 
         for i in range(1, self.number_of_displays + 1):
@@ -1052,10 +1012,6 @@ class QwiicAlphanumeric(object):
             :return: true if display updates successfully, false otherwise.
             :rtype: bool
         """
-        # Debug
-        print("\nThis is display_content before shift: ")
-        print(self.display_content)
-        
         for x in range((4 * self.number_of_displays) - shift_amt, shift_amt-1, -1):
             self.display_content[x] = self.display_content[x - shift_amt]
         
@@ -1071,12 +1027,6 @@ class QwiicAlphanumeric(object):
         for x in range(0, len(self.display_content)):
             if self.display_content[x] != '\x00':
                 temp += self.display_content[x]
-            
-        # Debug
-        print("\nThis is display_content: ")
-        print(self.display_content)
-        print("\nThis is temp: ")
-        print(temp)
 
         self.print(temp)
 
@@ -1110,12 +1060,6 @@ class QwiicAlphanumeric(object):
             if self.display_content[x] != '\x00':
                 temp += self.display_content[x]
         
-        # Debug
-        print("\nThis is display_content: ")
-        print(self.display_content)
-        print("\nThis is temp: ")
-        print(temp)
-        
         self.print(temp)
 
     # ---------------------------------------------------------------------------------
@@ -1139,10 +1083,9 @@ class QwiicAlphanumeric(object):
             display_num = 3
         elif address == self._device_address_display_four:
             display_num = 4
-        # TODO: not sure if this needs to be here or any of the lines above...
+
         self.is_connected(display_num)
 
-        # TODO: need to convert buff into list of bytes
         self._i2c.writeBlock(address, reg, buff)
     
     def write_RAM_byte(self, address, data_to_write):
