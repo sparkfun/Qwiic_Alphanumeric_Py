@@ -60,7 +60,7 @@ import qwiic_i2c
 _DEFAULT_NAME = "Qwiic Alphanumeric"
 
 _QWIIC_ALPHANUMERIC_DEFAULT_ADDRESS = 0x70
-_AVAILABLE_I2C_ADDRESS = [QWIIC_ALPHANUMERIC_DEFAULT_ADDRESS, 0x71, 0x72, 0x73]
+_AVAILABLE_I2C_ADDRESS = [_QWIIC_ALPHANUMERIC_DEFAULT_ADDRESS, 0x71, 0x72, 0x73]
 
 class QwiicAlphanumeric(object):
     """
@@ -232,9 +232,8 @@ class QwiicAlphanumeric(object):
     colon_on_off = 0    # Tracks the on/off state of the colon segment
     blink_rate = ALPHA_BLINK_RATE_NOBLINK   # Tracks the current blinking status
 
-    # TODO: Not sure this will work
-    display_RAM[16 * 4]
-    display_content[4 * 4 + 1] = ""
+    display_RAM = [' '] * 16 * 4
+    display_content = [' '] * (4 * 4 + 1)
 
     def __init__(self, address=None, i2c_driver=None):
 
@@ -275,11 +274,11 @@ class QwiicAlphanumeric(object):
         self._device_address_display_four = address_display_four
 
         # Figure out how many displays are attached by the number of addresses the user specified
-        if self._device_address_display_four != DEFAULT_NOTHING_ATTACHED:
+        if self._device_address_display_four != self.DEFAULT_NOTHING_ATTACHED:
             self.number_of_displays = 4
-        elif self._device_address_display_three != DEFAULT_NOTHING_ATTACHED:
+        elif self._device_address_display_three != self.DEFAULT_NOTHING_ATTACHED:
             self.number_of_displays = 3
-        elif self._device_address_display_two != DEFAULT_NOTHING_ATTACHED:
+        elif self._device_address_display_two != self.DEFAULT_NOTHING_ATTACHED:
             self.number_of_displays = 2
         else:
             self.number_of_displays = 1
@@ -402,7 +401,7 @@ class QwiicAlphanumeric(object):
         """
         data_to_write = self.ALPHA_CMD_SYSTEM_SETUP | 1 # Enable system clock  bit
 
-        status = self.write_RAM(self.look_up_display_address(display_number), data_to_write)
+        status = self.write_RAM_byte(self.look_up_display_address(display_number), data_to_write)
         time.sleep(0.001)   # Allow display to start
 
         return status
@@ -509,7 +508,7 @@ class QwiicAlphanumeric(object):
             duty = 0
         
         data_to_write = self.ALPHA_CMD_DIMMING_SETUP | duty
-        return self.write_RAM(self.look_up_display_address(display_number), data_to_write)
+        return self.write_RAM_byte(self.look_up_display_address(display_number), data_to_write)
 
     # ---------------------------------------------------------------------------------
     # set_blink_rate(rate)
@@ -528,7 +527,7 @@ class QwiicAlphanumeric(object):
         status = True
 
         for i in range(1, self.number_of_displays + 1):
-            if self.set_blink_rate_singe(i, rate) == False:
+            if self.set_blink_rate_single(i, rate) == False:
                 status = False
         
         return status
@@ -559,7 +558,7 @@ class QwiicAlphanumeric(object):
             blink_rate = self.ALPHA_BLINK_RATE_NOBLINK
         
         data_to_write = self.ALPHA_CMD_DISPLAY_SETUP | (blink_rate << 1) | self.display_on_off
-        return self.write_RAM(self.look_up_display_address(display_number), data_to_write)
+        return self.write_RAM_byte(self.look_up_display_address(display_number), data_to_write)
     
     # ---------------------------------------------------------------------------------
     # display_on_single(display_number)
@@ -587,7 +586,7 @@ class QwiicAlphanumeric(object):
             :return: True if display is successfully turned off, false otherwise
             :rtype: bool
         """
-        return self.set_displa_on_off(display_number, False)
+        return self.set_display_on_off(display_number, False)
     
     # ---------------------------------------------------------------------------------
     # set_display_on_off(display_number, turn_on_display)
@@ -609,7 +608,7 @@ class QwiicAlphanumeric(object):
             self.display_on_off = self.ALPHA_DISPLAY_OFF
         
         data_to_write = self.ALPHA_CMD_DISPLAY_SETUP | (self.blink_rate << 1) | self.display_on_off
-        return self.write_RAM(self.look_up_display_address(display_number), data_to_write)
+        return self.write_RAM_byte(self.look_up_display_address(display_number), data_to_write)
     
     # ---------------------------------------------------------------------------------
     # display_on()
@@ -665,6 +664,9 @@ class QwiicAlphanumeric(object):
             :return: true if decimal is successfully turned on, false otherwise.
             :rtype: bool
         """
+        # Debug
+        print("\nI'm in decimal_on_single")
+        
         return self.set_decimal_on_off(display_number, True)
 
     # ---------------------------------------------------------------------------------
@@ -698,14 +700,14 @@ class QwiicAlphanumeric(object):
         adr = 0x03
         dat = 0
 
-        if turn_on_decimal == False:
+        if turn_on_decimal == True:
             self.decimal_on_off = self.ALPHA_DECIMAL_ON
             dat = 0x01
         else:
             self.decimal_on_off = self.ALPHA_DECIMAL_OFF
             dat = 0x00
         
-        self.display_RAM[adr + (display_number - 1) * 16] = self.display_RAM[adr + display_number * 16] | dat
+        self.display_RAM[adr + (display_number - 1) * 16] = self.display_RAM[adr + (display_number - 1) * 16] | dat
         return self.update_display()
     
     # ---------------------------------------------------------------------------------
@@ -762,6 +764,9 @@ class QwiicAlphanumeric(object):
             :return: true if display updated successfully, false otherwise.
             :rtype: bool
         """
+        # Debug
+        print("\nI'm in colon_on_single")
+        
         return self.set_colon_on_off(display_number, True)
 
     # ---------------------------------------------------------------------------------
@@ -795,15 +800,15 @@ class QwiicAlphanumeric(object):
         adr = 0x01
         dat = 0
 
-        if self.turn_on_colon == True:
+        if turn_on_colon == True:
             self.colon_on_off = self.ALPHA_COLON_ON
             dat = 0x01
         else:
             self.colon_on_off = self.ALPHA_COLON_OFF
             dat = 0x00
         
-        self.display_RAM[adr + (display_number + 1) * 16] = display_RAM[adr + (display_number + 1) * 16]
-        return update_display()
+        self.display_RAM[adr + (display_number - 1) * 16] = self.display_RAM[adr + (display_number - 1) * 16] | dat
+        return self.update_display()
 
     # ---------------------------------------------------------------------------------
     # colon_on()
@@ -821,7 +826,7 @@ class QwiicAlphanumeric(object):
         self.colon_on_off = self.ALPHA_COLON_ON
         
         for i in range(1, self.number_of_displays + 1):
-            if self.colon_on_single(i) == False):
+            if self.colon_on_single(i) == False:
                 return False
         
         return status
@@ -861,30 +866,56 @@ class QwiicAlphanumeric(object):
             :return: nothing
             :rtype: Void
         """
-        com = segment - 'A' # Convert the segment letter back to a number
-
+        segment = ord(segment)
+        com = segment - ord('A') # Convert the segment letter back to a number
+        
+        # Debug
+        #print("\nThis is com: ")
+        #print(com)
+        
         if com > 6:
-            com -= 7
-        if segment == 'I':
+            com = com - 7
+        # Special cases in which the segment order is a lil switched.
+        if segment == ord('I'):
             com = 0
-        if segment == 'H'
+        if segment == ord('H'):
             com = 1
+        
+        # Debug
+        #print("\nThis is re-calculated com: ")
+        #print(com)
         
         row = digit % 4 # Convert digit (1 to 16) back to a relative position on a given 
                         # digit on a display
-        if segment > 'G':
-            row += 4
-
-        offset = digit / 4 * 16
+        if segment > ord('G'):
+            # DEbug
+            #print("\nI'm bigger than seg G!")
+            row = row + 4
+        
+        # DEBUG
+        #print("\nTHis is row: ")
+        #print(row)
+        
+        offset = int(digit / 4) * 16
+        # DEBUG: testing
         adr = com * 2 + offset
+        #adr = com * 2
+        
+        # debug:
+        #print("\nThis is offset: ")
+        #print(offset)
+        #print("\nTHis is adr: ")
+        #print(adr)
 
         # Determine the address
         if row > 7:
             adr = adr + 1
+            # Debug
+            #print("\nROW BIGGER THAN 7!")
 
         # Determine the data bit
         if row > 7:
-            row -= 8
+            row = row - 8
 
         dat = 1 << row
 
@@ -906,7 +937,9 @@ class QwiicAlphanumeric(object):
         """
         for i in range(0, 14):
             if (segments_to_turn_on >> i) & 0b1:
-                self.illuminate_segment('A' + i, digit) # Convert the segment number to a letter
+                temp_char = ord('A') + i
+                temp_char = chr(temp_char)
+                self.illuminate_segment(temp_char, digit) # Convert the segment number to a letter
         
     # ---------------------------------------------------------------------------------
     # print_char(display_char, digit)
@@ -921,32 +954,34 @@ class QwiicAlphanumeric(object):
             :return: nothing
             :rtype: Void
         """
+        # Convert character to ASCII representation
+        display_char = ord(display_char)
         character_position = 65532
 
         # Space
-        if display_char == ' ':
+        if display_char == ord(' '):
             character_position = 0
         # Printable symbols -- between first character '!' and last character '~'
-        elif display_char >= '!' && display_char <= '~':
-            character_position = display_char - '!' + 1
+        elif display_char >= ord('!') and display_char <= ord('~'):
+            character_position = display_char - ord('!') + 1
 
-        disp_num = self.digit_position / 4
+        disp_num = int(self.digit_position / 4)
 
         # Take care of special characters by turning correct segment on 
         if character_position == 14:    # '.'
-            self.decimal_on_single(disp_num)
+            self.decimal_on_single(disp_num+1)
         if character_position == 26:    # ':'
-            self.colon_on_single(disp_num)
+            self.colon_on_single(disp_num+1)
         if character_position == 65532: # unknown character
             character_position = self.SFE_ALPHANUM_UNKNOWN_CHAR
 
         self.illuminate_char(self.alphanumeric_segs[character_position], digit)
     
     # ---------------------------------------------------------------------------------
-    # display_print(print_string)
+    # print(print_string)
     #
     # Print a whole string to the alphanumeric display(s)
-    def display_print(self, print_string):
+    def print(self, print_string):
         """
             Print a whole string to the alphanumeric display(s)
 
@@ -954,9 +989,14 @@ class QwiicAlphanumeric(object):
             :return: true if update_display() is successful, false otherwise
             :rtype: bool
         """
-        # Clear the display_RAM array
-        for i in range(0, 16 * self.number_of_displays):
-            self.display_RAM[i] = 0
+        # Debug
+        print("this is print_string: ")
+        print(print_string)
+        
+        self.clear()
+        # # Clear the display_RAM array
+        # for i in range(0, 16 * self.number_of_displays):
+            # self.display_RAM[i] = 0
         
         self.digit_position = 0
 
@@ -969,7 +1009,7 @@ class QwiicAlphanumeric(object):
             else:
                 self.print_char(print_string[i], self.digit_position)
                 # Record to internal list
-                self.display_content[self.digit_position] = print_string[i]
+                self.display_content[i] = print_string[i]
 
                 self.digit_position = self.digit_position + 1
                 self.digit_position = self.digit_position % (self.number_of_displays * 4)
@@ -987,10 +1027,15 @@ class QwiicAlphanumeric(object):
             :return: true if displays are updated successfully, false otherwise.
             :rtype: bool
         """
+        # Debug
+        print("\nThis is display_RAM: ")
+        print(self.display_RAM)
+        
         status = True
 
-        for i in range(1, self.number_of_displays):
-            if self.write_RAM(self.look_up_display_address(i), 0, self.display_RAM) == False:
+        for i in range(1, self.number_of_displays + 1):
+            
+            if self.write_RAM(self.look_up_display_address(i), 0, self.display_RAM[(i-1)*16:(i*16)-1]) == False:
                 status = False
         
         return status
@@ -1007,7 +1052,11 @@ class QwiicAlphanumeric(object):
             :return: true if display updates successfully, false otherwise.
             :rtype: bool
         """
-        for x in range(4 * slef.number_of_displays - shift_amt, shift_amt, -1):
+        # Debug
+        print("\nThis is display_content before shift: ")
+        print(self.display_content)
+        
+        for x in range((4 * self.number_of_displays) - shift_amt, shift_amt-1, -1):
             self.display_content[x] = self.display_content[x - shift_amt]
         
         # Clear the leading characters
@@ -1015,9 +1064,21 @@ class QwiicAlphanumeric(object):
             if x + shift_amt > (4 * self.number_of_displays):
                 break   # Error check
 
-            self.display_content[0 + x] = ' '       
+            self.display_content[0 + x] = ' '     
+        
+        # Convert list of characters into string
+        temp = ""
+        for x in range(0, len(self.display_content)):
+            if self.display_content[x] != '\x00':
+                temp += self.display_content[x]
+            
+        # Debug
+        print("\nThis is display_content: ")
+        print(self.display_content)
+        print("\nThis is temp: ")
+        print(temp)
 
-        return self.display_print(self.display_content)
+        self.print(temp)
 
     # ---------------------------------------------------------------------------------
     # shift_left(shift_amt)
@@ -1032,7 +1093,7 @@ class QwiicAlphanumeric(object):
             :rtype: bool
         """
         for x in range(0, 4 * self.number_of_displays):
-            if x + shift_amt > (4 * self.number_of_displays):
+            if (x + shift_amt) > (4 * self.number_of_displays):
                 break   # Error check
             self.display_content[x] = self.display_content[x + shift_amt]
         
@@ -1043,7 +1104,19 @@ class QwiicAlphanumeric(object):
             
             self.display_content[4 * self.number_of_displays - 1 - x] = ' ' 
         
-        return self.display_print(self.display_content)
+        # Convert list of characters into string
+        temp = ''
+        for x in range(0, len(self.display_content)):
+            if self.display_content[x] != '\x00':
+                temp += self.display_content[x]
+        
+        # Debug
+        print("\nThis is display_content: ")
+        print(self.display_content)
+        print("\nThis is temp: ")
+        print(temp)
+        
+        self.print(temp)
 
     # ---------------------------------------------------------------------------------
     # write_RAM(address, reg, buff)
@@ -1071,3 +1144,6 @@ class QwiicAlphanumeric(object):
 
         # TODO: need to convert buff into list of bytes
         self._i2c.writeBlock(address, reg, buff)
+    
+    def write_RAM_byte(self, address, data_to_write):
+        self._i2c.writeCommand(address, data_to_write)

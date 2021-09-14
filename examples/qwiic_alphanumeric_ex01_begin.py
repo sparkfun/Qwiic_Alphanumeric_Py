@@ -49,13 +49,13 @@ def run_example():
     print("\nSparkFun Qwiic Alphanumeric - Example 1: Begin")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
-    if my_display.begin() != True:
+    if my_display.begin() == False:
         print("\nThe Qwiic Alhanumeric isn't connected to the system. Please check your connection", \
             file=sys.stderr)
         return
 
     print("\nQwiic Alphanumeric passed begin!")
-
+    
 if __name__ == '__main__':
     try:
         run_example()

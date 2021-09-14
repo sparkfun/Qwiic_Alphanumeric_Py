@@ -49,7 +49,7 @@ def run_example():
     print("\nSparkFun Qwiic Alphanumeric - Example 6: Set Blink Rate")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
-    if my_display.begin() != True:
+    if my_display.begin() == False:
         print("\nThe Qwiic Alphanumeric isn't connected to the system. Please check your connection.", \
             file=sys.stderr)
         return
@@ -58,7 +58,7 @@ def run_example():
 
     # Blink rate in Hz
     # Acceptable options are defined by the HT16K33 datasheet and are 0.5, 1.0, or 2.0 Hz (float)
-    my_display.set_blink_rate(2.0)
+    my_display.set_blink_rate(0.5)
 
     my_display.print("Milk")
 

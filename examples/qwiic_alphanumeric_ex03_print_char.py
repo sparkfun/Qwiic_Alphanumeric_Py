@@ -49,19 +49,29 @@ def run_example():
     print("\nSparkFun Qwiic Alphanumeric - Example 3: Print Char")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
-    if my_display.begin() != True:
+    if my_display.begin() == False:
         print("\nThe Qwiic Alphanumeric isn't connected to the system. Please check your connection.", \
             file=sys.stderr)
         return
     
     print("\nQwiic Alphanumeric ready!")
-
+        
     my_display.print_char('W', 0)
     my_display.print_char('H', 1)
     my_display.print_char('A', 2)
     my_display.print_char('T', 3)
 
     my_display.update_display()
+    
+    # # Un comment these lines if you want to see all available characters
+    # # Print to every digit of a given display
+    # for digit_num in range(0, 4):
+        # for i in range(ord(' '), ord('~')):
+            # if i is not ord(':') or ord('.'):
+                # my_display.print_char(chr(i), digit_num)
+                # my_display.update_display()
+                # time.sleep(1)
+                # my_display.clear()
 
 if __name__ == '__main__':
     try:

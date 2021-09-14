@@ -49,19 +49,21 @@ def run_example():
     print("\nSparkFun Qwiic Alphanumeric - Example 5: Set Brightness")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
-    if my_display.begin() != True:
+    if my_display.begin() == False:
         print("\nThe Qwiic Alphanumeric isn't connected to the system. Please check your wiring.", \
             file=sys.stderr)
         return
 
     print("\nQwiic Alphanumeric Ready!")
     
-    # The input to set_brightness() is a duty cycle over 16
-    # So, the acceptable inputs to this function are ints between 0 (display off)
-    # and 15 (full brightness)
-    my_display.set_brightness(15)
-
-    my_display.print("Milk")
+    while True:
+        for i in range(0, 16):
+            # The input to set_brightness() is a duty cycle over 16
+            # So, the acceptable inputs to this function are ints between 0 (display off)
+            # and 15 (full brightness)
+            my_display.set_brightness(i)
+            my_display.display_print("Milk")
+            time.sleep(1)
     
 if __name__ == '__main__':
     try:

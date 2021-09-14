@@ -50,7 +50,7 @@ def run_example():
     print("\nSparkFun Qwiic Alphanumeric - Example 9: Multi Display")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
-    if my_display.begin(0x70, 0x71) != True:
+    if my_display.begin(0x73, 0x70) == False:
         print("\nThe Qwiic Alhanumerics aren't connected to the system. Please check your connection", \
             file=sys.stderr)
         return

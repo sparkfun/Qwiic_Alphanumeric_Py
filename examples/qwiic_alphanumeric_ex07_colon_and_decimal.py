@@ -49,7 +49,7 @@ def run_example():
     print("\nSparkFun Qwiic Alphanumeric - Example 7: Colon and Decimal")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
-    if my_display.begin() != True:
+    if my_display.begin() == False:
         print("\nThe Qwiic Alphanumeric isn't connected to the system. Please check your connections.", \
             file=sys.stderr)
         return
@@ -59,14 +59,16 @@ def run_example():
     # You can print colons and decimals
     # NOTE: they can only go in the character position deterined by the layout of the display
     my_display.print("12:3.4")
-
-    # You can also turn decimals and colong on and off manually
+    
+    # You can also turn decimals and colon on and off manually
     # my_display.decimal_on() # Turn all decimals on  
     # my_display.decimal_off()    # Turn all decimals off
-    # my_display.decimal_on_single(0) # Turn decimal on for one display   # TODO: this line should not work....
-    # my_display.colon()  # Turn all colons on
+    # my_display.decimal_on_single(1) # Turn decimal on for display one
+    # my_display.decimal_off_single(1)    # Turn decimal off for display one
+    # my_display.colon_on()  # Turn all colons on
     # my_display.colon_off()  # Turn all the colons off
-    # my_display.colon_on_single(1)   # Turn colon on for one display
+    # my_display.colon_on_single(1)   # Turn colon on for display one
+    # my_display.colon_off_single(1)  # Turn colon off for display one
 
 if __name__ == '__main__':
     try:
