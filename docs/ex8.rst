@@ -1,6 +1,6 @@
 
-Example Eight - Unknown Char
+Example Eight - Multiple Displays
 -----------------------------------
-.. literalinclude:: ../examples/qwiic_alphanumeric_ex08_unknown_char.py
-    :caption: examples/qwiic_alphanumeric_ex08_unknown_char.py
+.. literalinclude:: ../examples/qwiic_alphanumeric_ex08_multi_display.py
+    :caption: examples/qwiic_alphanumeric_ex08_multi_display.py
     :linenos:

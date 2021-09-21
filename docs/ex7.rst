@@ -1,6 +1,6 @@
 
-Example Seven - Colon and Decimal 
+Example Seven - Unknown Character 
 -----------------------------------
-.. literalinclude:: ../examples/qwiic_alphanumeric_ex07_colon_and_decimal.py
-    :caption: examples/qwiic_alphanumeric_ex07_colon_and_decimal.py
+.. literalinclude:: ../examples/qwiic_alphanumeric_ex07_unknown_char.py
+    :caption: examples/qwiic_alphanumeric_ex07_unknown_char.py
     :linenos:

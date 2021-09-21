@@ -1,6 +1,6 @@
 
-Example Six - Set Blink Rate
+Example Six - Colon and Decimal
 -----------------------------------
-.. literalinclude:: ../examples/qwiic_alphanumeric_ex06_set_blink_rate.py
-    :caption: examples/qwiic_alphanumeric_ex06_set_blink_rate.py
+.. literalinclude:: ../examples/qwiic_alphanumeric_ex06_colon_and_decimal.py
+    :caption: examples/qwiic_alphanumeric_ex06_colon_and_decimal.py
     :linenos:

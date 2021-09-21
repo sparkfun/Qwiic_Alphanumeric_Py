@@ -1,6 +1,6 @@
 
-Example Four - Print String
+Example Four - Set Brightness
 -----------------------------------
-.. literalinclude:: ../examples/qwiic_alphanumeric_ex04_print_string.py
-    :caption: examples/qwiic_alphanumeric_ex04_print_string.py
+.. literalinclude:: ../examples/qwiic_alphanumeric_ex04_set_brightness.py
+    :caption: examples/qwiic_alphanumeric_ex04_set_brightness.py
     :linenos:
