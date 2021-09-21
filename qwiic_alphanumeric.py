@@ -260,10 +260,10 @@ class QwiicAlphanumeric(object):
             Run is_connected().
             Initialize and clear displays.
             
-            :param address_display_one: I2C address of left-most display
-            :param address_display_two: I2C address of the left-center display
-            :param address_dispplay_three: I2C address of the right-center display
-            :param address_display_four: I2C address of the right-most display
+            :param address_display_one: I2C address of first display
+            :param address_display_two: I2C address of the second display
+            :param address_dispplay_three: I2C address of the third display
+            :param address_display_four: I2C address of the fourth display
             :return: Returns true if a Qwiic Alphanumeric is connected to the system.
                     False otherwise.
             :rtype: bool
