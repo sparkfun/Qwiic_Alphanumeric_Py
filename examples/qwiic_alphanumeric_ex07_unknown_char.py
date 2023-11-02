@@ -1,6 +1,6 @@
 # !/usr/bin/env python
 # ----------------------------------------------------------------------
-# qwiic_alphanumeric_ex8_unknown_char.py
+# qwiic_alphanumeric_ex7_unknown_char.py
 #
 # This example demonstrates what the library does when the user tries to 
 # print an unknown character.
@@ -38,7 +38,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #=======================================================================
-# Example 8
+# Example 7
 
 from __future__ import print_function
 import qwiic_alphanumeric
@@ -47,7 +47,7 @@ import sys
 
 def run_example():
 
-    print("\nSparkFun Qwiic Alphanumeric - Example 8: Unkown Char")
+    print("\nSparkFun Qwiic Alphanumeric - Example 7: Unkown Char")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
     if my_display.begin() == False:
@@ -65,5 +65,5 @@ if __name__ == '__main__':
     try:
         run_example()
     except (KeyboardInterrupt, SystemExit) as exErr:
-        print("\nEnding Example 8")
+        print("\nEnding Example 7")
         sys.exit(0)

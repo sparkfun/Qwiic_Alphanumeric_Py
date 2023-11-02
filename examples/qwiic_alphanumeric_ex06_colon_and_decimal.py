@@ -1,6 +1,6 @@
 # !/usr/bin/env python
 # ----------------------------------------------------------------------
-# qwiic_alphanumeric_ex7_colon_and_decimal .py
+# qwiic_alphanumeric_ex6_colon_and_decimal .py
 #
 # This example tests the library's response to printing colons or decimal points.
 # ----------------------------------------------------------------------
@@ -37,7 +37,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #=======================================================================
-# Example 7
+# Example 6
 
 from __future__ import print_function
 import qwiic_alphanumeric
@@ -46,7 +46,7 @@ import sys
 
 def run_example():
 
-    print("\nSparkFun Qwiic Alphanumeric - Example 7: Colon and Decimal")
+    print("\nSparkFun Qwiic Alphanumeric - Example 6: Colon and Decimal")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
     if my_display.begin() == False:
@@ -74,5 +74,5 @@ if __name__ == '__main__':
     try:
         run_example()
     except (KeyboardInterrupt, SystemExit) as exErr:
-        print("\nEnding Example 7")
+        print("\nEnding Example 6")
         sys.exit(0)

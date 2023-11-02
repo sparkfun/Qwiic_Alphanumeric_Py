@@ -1,6 +1,6 @@
 # !/usr/bin/env python
 # ----------------------------------------------------------------------
-# qwiic_alphanumeric_ex10_scrolling_string.py
+# qwiic_alphanumeric_ex9_scrolling_string.py
 #
 # This example tests the scrolling functionality of the display.
 # ----------------------------------------------------------------------
@@ -37,7 +37,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #=======================================================================
-# Example 10
+# Example 9
 
 from __future__ import print_function
 import qwiic_alphanumeric
@@ -46,7 +46,7 @@ import sys
 
 def run_example():
 
-    print("\nSparkFun Qwiic Alphanumeric - Example 10: Scrolling String")
+    print("\nSparkFun Qwiic Alphanumeric - Example 9: Scrolling String")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
     if my_display.begin(0x70, 0x71) == False:
@@ -69,5 +69,5 @@ if __name__ == '__main__':
     try:
         run_example()
     except (KeyboardInterrupt, SystemExit) as exErr:
-        print("\nEnding Example 10")
+        print("\nEnding Example 9")
         sys.exit(0)

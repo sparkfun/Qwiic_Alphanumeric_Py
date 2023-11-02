@@ -1,6 +1,6 @@
 # !/usr/bin/env python
 # ----------------------------------------------------------------------
-# qwiic_alphanumeric_ex9_multi_display.py
+# qwiic_alphanumeric_ex8_multi_display.py
 #
 # This example demonstrates how to connect multiple displays to the bus
 # to print longer strings.
@@ -38,7 +38,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #=======================================================================
-# Example 9
+# Example 8
 
 from __future__ import print_function
 import qwiic_alphanumeric
@@ -47,7 +47,7 @@ import sys
 
 def run_example():
 
-    print("\nSparkFun Qwiic Alphanumeric - Example 9: Multi Display")
+    print("\nSparkFun Qwiic Alphanumeric - Example 8: Multi Display")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
     if my_display.begin(0x70, 0x71) == False:
@@ -63,5 +63,5 @@ if __name__ == '__main__':
     try:
         run_example()
     except (KeyboardInterrupt, SystemExit) as exErr:
-        print("\nEnding Example 9")
+        print("\nEnding Example 8")
         sys.exit(0)
