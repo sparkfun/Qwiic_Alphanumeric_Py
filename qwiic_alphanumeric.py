@@ -476,7 +476,7 @@ class QwiicAlphanumeric(object):
             This function sets the brightness of all displays on the bus.
             Duty cycle over 16.
 
-            :param duty: Valid between 0 (display off) and 15 (full brightness)
+            :param duty: Valid between 0 (1/16 brightnss) and 15 (full brightness)
             :return: True if brightness is successfully updated, false otherwise.
             :rtype: bool
         """

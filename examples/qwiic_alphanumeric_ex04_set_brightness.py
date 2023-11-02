@@ -59,8 +59,8 @@ def run_example():
     while True:
         for i in range(0, 16):
             # The input to set_brightness() is a duty cycle over 16
-            # So, the acceptable inputs to this function are ints between 0 (display off)
-            # and 15 (full brightness)
+            # So, the acceptable inputs to this function are ints between 0
+            # (1/16 brightness) and 15 (full brightness)
             my_display.set_brightness(i)
             time.sleep(1)
             my_display.print("Milk")
