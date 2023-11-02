@@ -62,8 +62,8 @@ def run_example():
             # So, the acceptable inputs to this function are ints between 0 (display off)
             # and 15 (full brightness)
             my_display.set_brightness(i)
-            my_display.display_print("Milk")
             time.sleep(1)
+            my_display.print("Milk")
     
 if __name__ == '__main__':
     try:
