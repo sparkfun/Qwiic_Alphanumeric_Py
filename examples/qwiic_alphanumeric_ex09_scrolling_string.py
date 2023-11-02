@@ -58,7 +58,8 @@ def run_example():
     
     my_display.print("GET MILK")
 
-    while 1:
+    # Loop through all 8 characters
+    for i in range(8):
         time.sleep(1)
         my_display.shift_left()
         # Alternatively - you could also shift the string to the right

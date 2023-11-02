@@ -62,16 +62,19 @@ def run_example():
     my_display.print_char('T', 3)
 
     my_display.update_display()
+
+    time.sleep(1)
     
-    # # Un comment these lines if you want to see all available characters
-    # # Print to every digit of a given display
-    # for digit_num in range(0, 4):
-        # for i in range(ord(' '), ord('~')):
-            # if i is not ord(':') or ord('.'):
-                # my_display.print_char(chr(i), digit_num)
-                # my_display.update_display()
-                # time.sleep(1)
-                # my_display.clear()
+    # Display all available characters
+    for i in range(ord(' '), ord('~')):
+        if i is not ord(':') or ord('.'):
+            my_display.print_char(chr(i), 0)
+            my_display.print_char(chr(i), 1)
+            my_display.print_char(chr(i), 2)
+            my_display.print_char(chr(i), 3)
+            my_display.update_display()
+            time.sleep(0.1)
+            my_display.clear()
 
 if __name__ == '__main__':
     try:

@@ -56,14 +56,17 @@ def run_example():
 
     print("\nQwiic Alphanumeric Ready!")
     
-    while True:
+    my_display.print("Milk")
+    
+    # Repeat a few times
+    for i in range(4):
+        # Loop through all brightness settings
         for i in range(0, 16):
             # The input to set_brightness() is a duty cycle over 16
             # So, the acceptable inputs to this function are ints between 0
             # (1/16 brightness) and 15 (full brightness)
             my_display.set_brightness(i)
-            time.sleep(1)
-            my_display.print("Milk")
+            time.sleep(0.1)
     
 if __name__ == '__main__':
     try:
