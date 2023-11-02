@@ -1,6 +1,6 @@
 # !/usr/bin/env python
 # ----------------------------------------------------------------------
-# qwiic_alphanumeric_ex6_set_blink_rate.py
+# qwiic_alphanumeric_ex5_set_blink_rate.py
 #
 # This example sets the blink rate of the display.
 # ----------------------------------------------------------------------
@@ -37,7 +37,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #=======================================================================
-# Example 6
+# Example 5
 
 from __future__ import print_function
 import qwiic_alphanumeric
@@ -46,7 +46,7 @@ import sys
 
 def run_example():
 
-    print("\nSparkFun Qwiic Alphanumeric - Example 6: Set Blink Rate")
+    print("\nSparkFun Qwiic Alphanumeric - Example 5: Set Blink Rate")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
     if my_display.begin() == False:
@@ -66,5 +66,5 @@ if __name__ == '__main__':
     try:
         run_example()
     except (KeyboardInterrupt, SystemExit) as exErr:
-        print("\nEnding Example 6")
+        print("\nEnding Example 5")
         sys.exit(0)

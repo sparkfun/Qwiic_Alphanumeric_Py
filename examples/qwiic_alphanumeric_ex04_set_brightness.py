@@ -1,6 +1,6 @@
 # !/usr/bin/env python
 # ----------------------------------------------------------------------
-# qwiic_alphanumeric_ex5_set_brightness.py
+# qwiic_alphanumeric_ex4_set_brightness.py
 #
 # This example sets the brightness of the Qwiic Alphanumeric display.
 # ----------------------------------------------------------------------
@@ -37,7 +37,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #=======================================================================
-# Example 5
+# Example 4
 
 from __future__ import print_function
 import qwiic_alphanumeric
@@ -46,7 +46,7 @@ import sys
 
 def run_example():
 
-    print("\nSparkFun Qwiic Alphanumeric - Example 5: Set Brightness")
+    print("\nSparkFun Qwiic Alphanumeric - Example 4: Set Brightness")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
     if my_display.begin() == False:
@@ -56,18 +56,21 @@ def run_example():
 
     print("\nQwiic Alphanumeric Ready!")
     
-    while True:
+    my_display.print("Milk")
+    
+    # Repeat a few times
+    for i in range(4):
+        # Loop through all brightness settings
         for i in range(0, 16):
             # The input to set_brightness() is a duty cycle over 16
-            # So, the acceptable inputs to this function are ints between 0 (display off)
-            # and 15 (full brightness)
+            # So, the acceptable inputs to this function are ints between 0
+            # (1/16 brightness) and 15 (full brightness)
             my_display.set_brightness(i)
-            my_display.display_print("Milk")
-            time.sleep(1)
+            time.sleep(0.1)
     
 if __name__ == '__main__':
     try:
         run_example()
     except (KeyboardInterrupt, SystemExit) as exErr:
-        print("\nEnding Example 5")
+        print("\nEnding Example 4")
         sys.exit(0)

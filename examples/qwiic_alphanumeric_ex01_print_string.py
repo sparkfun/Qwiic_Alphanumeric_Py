@@ -1,6 +1,6 @@
 # !/usr/bin/env python
 # ----------------------------------------------------------------------
-# qwiic_alphanumeric_ex4_print_string.py
+# qwiic_alphanumeric_ex1_print_string.py
 #
 # This example shows how to use the print() function to illuminate strings
 # on the alphanumeric display.
@@ -38,7 +38,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #=======================================================================
-# Example 4
+# Example 1
 
 from __future__ import print_function
 import qwiic_alphanumeric
@@ -47,7 +47,7 @@ import sys
 
 def run_example():
 
-    print("\nSparkFun Qwiic Alphanumeric - Example 4: Print String")
+    print("\nSparkFun Qwiic Alphanumeric - Example 1: Print String")
     my_display = qwiic_alphanumeric.QwiicAlphanumeric()
 
     if my_display.begin() == False:
@@ -63,5 +63,5 @@ if __name__ == '__main__':
     try:
         run_example()
     except (KeyboardInterrupt, SystemExit) as exErr:
-        print("\nEnding Example 4")
+        print("\nEnding Example 1")
         sys.exit(0)
