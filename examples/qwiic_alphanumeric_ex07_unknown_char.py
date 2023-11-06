@@ -40,7 +40,6 @@
 #=======================================================================
 # Example 7
 
-from __future__ import print_function
 import qwiic_alphanumeric
 import time
 import sys
