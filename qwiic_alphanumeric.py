@@ -232,7 +232,7 @@ class QwiicAlphanumeric(object):
     colon_on_off = 0    # Tracks the on/off state of the colon segment
     blink_rate = ALPHA_BLINK_RATE_NOBLINK   # Tracks the current blinking status
 
-    display_RAM = [' '] * 16 * 4
+    display_RAM = [0] * 16 * 4
     display_content = [' '] * (4 * 4 + 1)
 
     def __init__(self, address=None, i2c_driver=None):
@@ -627,7 +627,7 @@ class QwiicAlphanumeric(object):
 
         for i in range(1, self.number_of_displays + 1):
             if self.display_on_single(i) == False:
-                status = false
+                status = False
         
         return status
     
@@ -704,7 +704,8 @@ class QwiicAlphanumeric(object):
             self.decimal_on_off = self.ALPHA_DECIMAL_OFF
             dat = 0x00
         
-        self.display_RAM[adr + (display_number - 1) * 16] = self.display_RAM[adr + (display_number - 1) * 16] | dat
+        self.display_RAM[adr + (display_number - 1) * 16] &= 0xFE
+        self.display_RAM[adr + (display_number - 1) * 16] |= dat
         return self.update_display()
     
     # ---------------------------------------------------------------------------------
@@ -801,7 +802,8 @@ class QwiicAlphanumeric(object):
             self.colon_on_off = self.ALPHA_COLON_OFF
             dat = 0x00
         
-        self.display_RAM[adr + (display_number - 1) * 16] = self.display_RAM[adr + (display_number - 1) * 16] | dat
+        self.display_RAM[adr + (display_number - 1) * 16] &= 0xFE
+        self.display_RAM[adr + (display_number - 1) * 16] |= dat
         return self.update_display()
 
     # ---------------------------------------------------------------------------------
@@ -964,7 +966,7 @@ class QwiicAlphanumeric(object):
         
         self.digit_position = 0
 
-        for i in range(0, len(print_string)):
+        for i in range(0, min(len(print_string), self.number_of_displays * 4)):
             # For special characters like '.' or ':', do not increment the digit position
             if print_string[i] == '.':
                 self.print_char('.', 0)
@@ -976,7 +978,6 @@ class QwiicAlphanumeric(object):
                 self.display_content[i] = print_string[i]
 
                 self.digit_position = self.digit_position + 1
-                self.digit_position = self.digit_position % (self.number_of_displays * 4)
         
         self.update_display()
     
