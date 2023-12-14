@@ -627,7 +627,7 @@ class QwiicAlphanumeric(object):
 
         for i in range(1, self.number_of_displays + 1):
             if self.display_on_single(i) == False:
-                status = false
+                status = False
         
         return status
     
