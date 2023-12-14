@@ -704,7 +704,8 @@ class QwiicAlphanumeric(object):
             self.decimal_on_off = self.ALPHA_DECIMAL_OFF
             dat = 0x00
         
-        self.display_RAM[adr + (display_number - 1) * 16] = self.display_RAM[adr + (display_number - 1) * 16] | dat
+        self.display_RAM[adr + (display_number - 1) * 16] &= 0xFE
+        self.display_RAM[adr + (display_number - 1) * 16] |= dat
         return self.update_display()
     
     # ---------------------------------------------------------------------------------
@@ -801,7 +802,8 @@ class QwiicAlphanumeric(object):
             self.colon_on_off = self.ALPHA_COLON_OFF
             dat = 0x00
         
-        self.display_RAM[adr + (display_number - 1) * 16] = self.display_RAM[adr + (display_number - 1) * 16] | dat
+        self.display_RAM[adr + (display_number - 1) * 16] &= 0xFE
+        self.display_RAM[adr + (display_number - 1) * 16] |= dat
         return self.update_display()
 
     # ---------------------------------------------------------------------------------
