@@ -965,19 +965,21 @@ class QwiicAlphanumeric(object):
         self.clear()
         
         self.digit_position = 0
+        string_index = 0
 
-        for i in range(0, min(len(print_string), self.number_of_displays * 4)):
+        while string_index < len(print_string) and self.digit_position < (4 * self.number_of_displays):
             # For special characters like '.' or ':', do not increment the digit position
-            if print_string[i] == '.':
+            if print_string[string_index] == '.':
                 self.print_char('.', 0)
-            elif print_string[i] == ':':
+            elif print_string[string_index] == ':':
                 self.print_char(':', 0)
             else:
-                self.print_char(print_string[i], self.digit_position)
+                self.print_char(print_string[string_index], self.digit_position)
                 # Record to internal list
-                self.display_content[i] = print_string[i]
+                self.display_content[self.digit_position] = print_string[string_index]
 
-                self.digit_position = self.digit_position + 1
+                self.digit_position += 1
+            string_index += 1
         
         self.update_display()
     
