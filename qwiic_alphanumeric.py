@@ -238,7 +238,10 @@ class QwiicAlphanumeric(object):
     def __init__(self, address=None, i2c_driver=None):
 
         # Did the user specify an I2C address?
-        self.address = address if address != None else self.available_addresses[0]
+        if address in self.available_addresses:
+            self.address = address
+        else:
+            self.address = self.available_addresses[0]
 
         # Load the I2C driver if one isn't provided
         if i2c_driver == None:
@@ -312,7 +315,7 @@ class QwiicAlphanumeric(object):
         
         # The LED driver IC sometimes fails to respond. This attempts multiple times before giving up.
         for x in range(0, tries_before_giveup):
-            if qwiic_i2c.isDeviceConnected(self.look_up_display_address(display_number)) == True:
+            if self._i2c.isDeviceConnected(self.look_up_display_address(display_number)) == True:
                 return True
             time.sleep(0.01)
         return False
